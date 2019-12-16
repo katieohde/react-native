@@ -1,35 +1,56 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Modal } from 'react-native';
 
 const GoalInput = props => {
   const [enteredGoal, setEnteredGoal] = useState('');
 
-  const addGoalHandler = (goalTitle) => {
-    setCourseGoals(currentGoals => [...currentGoals, { id: Math.random().toString(), value: enteredGoal }]);
-  }
+  const goalInputHandler = enteredText => {
+    setEnteredGoal(enteredText);
+  };
+
+const addGoalHander = () => {
+  props.onAddGoal(enteredGoal);
+  setEnteredGoal('');
+}
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput        
-        placeholder="Course Goal" 
-        style={styles.inputItem}
-        onChangeText={goalInputHandler}
-        value={enteredGoal} />
-      <Button title="ADD" onPress={props.onAddGoal.bind(this, enteredGoal)} />
-    </View>
+    <Modal visible={props.visible} animationType="slide" >
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Course Goal"
+          style={styles.input}
+          onChangeText={goalInputHandler}
+          value={enteredGoal}
+        />
+        <View style={styles.buttonContainer}>
+          <View style={styles.inputButton}><Button title="CANCEL" color="red" onPress={props.onCancel} /></View>
+          <View style={styles.inputButton}><Button title="ADD" onPress={props.onAddGoal.bind(this, enteredGoal)} /></View>
+        </View>
+      </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flexDirection: 'row', 
-    justifyContent: "space-between", 
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center'
-  },  
-  inputItem: {
-    borderBottomColor: 'black', 
-    borderBottomWidth: 1, 
-    padding: 10, width: '80%'
+  },
+  input: {
+    width: '80%',
+    borderColor: 'black',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "80%"
+  },
+  inputButton: {
+    width: "40%"
   }
 });
 
